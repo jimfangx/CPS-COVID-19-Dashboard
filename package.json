@@ -1,0 +1,15 @@
+{
+  "name": "cps-covid-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AirFusion45",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^5.5.0",
+    "superagent": "^6.1.0"
+  }
+}
