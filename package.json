@@ -9,6 +9,7 @@
   "author": "AirFusion45",
   "license": "MIT",
   "dependencies": {
+    "node-schedule": "^1.3.2",
     "puppeteer": "^5.5.0",
     "superagent": "^6.1.0"
   }
