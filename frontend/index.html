@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CPS COVID-19 Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="position-relative">
+        <!-- change href below to this dashboard's link? -->
+        <a target="_blank" href="https://college-prep.org">
+            <img src="./logo.jpg" class="center-block" alt="CPS Logo" style="width:200px; height:200px;">
+        </a>
+    </div>
+
+    <h1 class="display-4 text-center">CPS COVID-19 Dashboard</h1>
+    <p class="text-center">This dashboard contains a collection of graphs and charts which serve as a supplement to the
+        <a target="_blank"
+            href="https://docs.google.com/document/d/1JOSWem1nFJZRoVMWGDN8FYBcMftzHRi-5yZ283NTBpE/edit#">Official
+            COVID-19 Dashboard</a> for College Prep. All data on this site is gathered from the Official COVID-19
+        Dashboard. This dashboard checks for data updates nightly.
+    </p>
+    <p class="text-center">For more information on College Prep's COVID response, please visit <a target="_blank"
+            href="https://www.college-prep.org/2020-21-school-year">this website</a>.</p>
+    <!-- add space below -->
+
+
+    <div>
+        <h6 class="display-6 text-center">Current Dashboard:
+            <select class="form-select form-select-lg mb-3" style="width: auto; display:inline-block; margin-top: 7px;">
+                <option value="total" selected>Totals</option>
+                <option value="staff">Staff</option>
+                <option value="student">Students</option>
+            </select>
+        </h6>
+        
+        <iframe id="dashboard" src="https://public.tableau.com/views/CPSCOVID-19/Totals?:showVizHome=no&:embed=true"
+            width="100%" height=""></iframe>
+    </div>
+
+    <script src="./index.js" async defer></script>
+</body>
+
+</html>
