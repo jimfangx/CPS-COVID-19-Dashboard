@@ -70,7 +70,8 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
             writtenWeeks = require('./writtenWeeks.json')
         }
 
-        if (writtenWeeks[writtenWeeks.length - 1] != writeArray[0]) { // || dataNotComplete
+        if (writtenWeeks[writtenWeeks.length - 1] != writeArray[0] || config.lastAccessDataNotComplete) { // || dataNotComplete
+            config.lastAccessDataNotComplete = false
             for (i = 0; i < writtenWeeks.length + 2; i++) { // add 2 for the header & the blank row that needs to be entered
                 if (i + 1 != writtenWeeks.length + 2) { // not the last one
                     await page.keyboard.press('ArrowDown');
@@ -89,6 +90,12 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
                     break;
                 }
             }
+        }
+
+        if (dataNotComplete) {
+            var configObj = JSON.parse(config)
+            configObj.lastAccessDataNotComplete = true
+            fs.writeFile('./config.json', JSON.stringify(configObj))
         }
 
         await page.goto('https://public.tableau.com/profile/jim.fang#!/vizhome/CPSCOVID-19/Totals')
