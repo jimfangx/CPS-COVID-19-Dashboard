@@ -2,7 +2,7 @@ $(function () {
     if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
         $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/TotalsMobile?:showVizHome=no&:embed=true")
     }
-    $('#dashboard').attr('height', window.innerHeight - 74.5) //52.3 = "current dashboard" height
+    $('#dashboard').attr('height', window.innerHeight - 131) //52.3 = "current dashboard" height
 });
 
 $('select').on('change', function () {
