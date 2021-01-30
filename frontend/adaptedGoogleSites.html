@@ -38,30 +38,7 @@
         </a> -->
     </div>
 
-    <h1 class="display-4 text-center">The Unofficial CPS COVID-19 Dashboard</h1>
-    <p class="text-center">This dashboard contains a collection of graphs and charts which serve as a supplement to the
-        <a target="_blank"
-            href="https://docs.google.com/document/d/1JOSWem1nFJZRoVMWGDN8FYBcMftzHRi-5yZ283NTBpE/edit#">Official
-            COVID-19 Dashboard</a> for College Prep. All data on this site is gathered from the Official COVID-19
-        Dashboard. This dashboard checks for new data nightly at midnight.
-    </p>
-    <p class="text-center">For more information on College Prep's COVID response, please visit <a target="_blank"
-            href="https://www.college-prep.org/2020-21-school-year">this website</a>.</p>
-    <!-- add space below -->
-    <br>
-    <h4 class="text-center">Dashboard Descriptions</h4>
-    <p class="text-center"><a class="font-weight-bold text-center" style="text-decoration:none; color: black;">Totals:
-        </a>A dashboard that displays the
-        total number (Staff + Students) of cases & tests</p>
-    <p class="text-center"><a class="font-weight-bold text-center" style="text-decoration:none; color: black;">Staff:
-        </a>A dashboard that displays number of cases & tests for staff</p>
-    <p class="text-center"><a class="font-weight-bold text-center" style="text-decoration:none; color: black;">Students:
-        </a>A dashboard that displays number of cases & tests for students</p>
-    <p class="text-center"><a class="font-weight-bold text-center" style="text-decoration:none; color: black;">Alameda
-            County vs CPS Totals:
-        </a>A dashboard that compares Alameda County's COVID data with College Prep's COVID data</p>
-    <br>
-    <br>
+   
     <div>
         <h6 class="display-6 text-center">Current Dashboard:
             <select class="form-select form-select-lg mb-3" style="width: auto; display:inline-block; margin-top: 7px;">
@@ -73,48 +50,45 @@
         </h6>
 
         <iframe id="dashboard" src="https://public.tableau.com/views/CPSCOVID-19/Totals?:showVizHome=no&:embed=true"
-            width="100%" height=""></iframe>
+            width="100%" height="90%"></iframe>
     </div>
     <br>
     <!-- <script src="./index.js" async defer></script> -->
-    <div class="footer">
-        <p class="text-center">&copy; 2021 Jim Fang</p>
-        <p class="text-center">Built with <a href="https://www.tableau.com" target="_blank">Tableau</a> & <a
-                href="https://pptr.dev" target="_blank">Puppeteer</a>. Project open-sourced under the MIT license on <a
-                href="https://github.com/AirFusion45/CPS-COVID-19-Dashboard" target="_blank">Github</a>.</p>
-    </div>
 
     <script async defer>
         $(function () {
             if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
                 $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/TotalsMobile?:showVizHome=no&:embed=true")
+                $('#dashboard').attr('height',"1000px")
             }
-            // $('#dashboard').attr('height', window.innerHeight - 74.5) //52.3 = "current dashboard" height
-            $('#dashboard').attr('height', window.innerHeight) //52.3 = "current dashboard" height
         });
 
         $('select').on('change', function () {
             if (this.value === 'total') {
                 if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/TotalsMobile?:showVizHome=no&:embed=true")
+                    $('#dashboard').attr('height',"1000px")
                 } else {
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/Totals?:showVizHome=no&:embed=true")
                 }
             } else if (this.value === 'staff') {
                 if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/StaffMobile?:showVizHome=no&:embed=true")
+                    $('#dashboard').attr('height',"1000px")
                 } else {
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/Staff?:showVizHome=no&:embed=true")
                 }
             } else if (this.value === 'student') {
                 if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/StudentMobile?:showVizHome=no&:embed=true")
+                    $('#dashboard').attr('height',"1000px")
                 } else {
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/Students?:showVizHome=no&:embed=true")
                 }
             } else if (this.value === 'alamedavscps') {
                 if (window.innerWidth <= 800 && window.innerHeight <= 900) { // mobile detection
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/AlamedavsCPSTotalsMobile?:showVizHome=no&:embed=true")
+                    $('#dashboard').attr('height',"1600px")
                 } else {
                     $('#dashboard').attr('src', "https://public.tableau.com/views/CPSCOVID-19/AlamedavsCPSTotals?:showVizHome=no&:embed=true")
                 }
