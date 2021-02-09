@@ -1,6 +1,6 @@
 # CPS-COVID-19-Dashboard
 
-An Unofficial COVID-19 Data Visualization Dashboard created for College Prep made using [Puppeteer](https://pptr.dev) and [Tableau](https://www.tableau.com/)
+An Unofficial COVID-19 Data Visualization Dashboard created for College Prep made using [Puppeteer](https://pptr.dev) and [Tableau](https://www.tableau.com/).
 
 
 # Build from source
@@ -55,12 +55,12 @@ This Project is licensed under MIT License - see the LICENSE.md file for more de
 
 ## Open Source Libraries 
 ### Server
-[node-schedule](https://github.com/node-schedule/node-schedule)
-[Puppeteer](https://pptr.dev) - LICENSE in pupptrLicense.txt
-[superagent](https://github.com/visionmedia/superagent)
+* [node-schedule](https://github.com/node-schedule/node-schedule)
+* [Puppeteer](https://pptr.dev) - LICENSE in pupptrLicense.txt
+* [superagent](https://github.com/visionmedia/superagent)
 ## Website
-[Materalize-CSS](https://github.com/Dogfalo/materialize)
-[Bootstrap](https://github.com/twbs/bootstrap)
+* [Materalize-CSS](https://github.com/Dogfalo/materialize)
+* [Bootstrap](https://github.com/twbs/bootstrap)
 
 ## Contact Me
 Feel free to contact me if you find bugs, license issues, missing credits, etc.
@@ -70,4 +70,4 @@ Feel free to contact me if you find bugs, license issues, missing credits, etc.
     * Discord: AirFusion#1706
 
 ## Note/Notes 
-    * The implemented website is accessible by College Prep students & staff only.
+* The implemented website is accessible by College Prep students & staff only.
