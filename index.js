@@ -97,7 +97,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
                     numTests = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
                     return numTests
                 })
-                alamedaTest[monthNames[todayDate.getMonth()] + " " + todayDate.getUTCDate()] = numTests
+                alamedaTest[monthNames[todayDate.getMonth()] + " " + todayDate.getDate()] = numTests
                 fs.writeFile('alamedaTest.json', JSON.stringify(alamedaTest), function (err) {
                     if (err) console.log(err)
                 })
@@ -110,10 +110,11 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
             // console.log(writeArray)
             await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getUTCMonth() + 1)).slice(-2)}-${("0" + firstday.getUTCDate()).slice(-2)}"}`)
             await page.waitForTimeout(1000)
-            var alamedaCases = await page.evaluate(() => {
+            var alamedaCases = await page.evaluate((firstday) => {
+                var firstday = new Date(firstday) // need to create new date obj
                 if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) {
                     for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                        if (JSON.parse(document.querySelector("body > pre").innerText).result.records[0].date.includes(`${firstday.getFullYear()}-${("0" + (firstday.getUTCMonth() + 1)).slice(-2)}-${("0" + firstday.getUTCDate()).slice(-2)}`)) {
+                        if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstday.getFullYear()}-${("0" + (firstday.getUTCMonth() + 1)).slice(-2)}-${("0" + firstday.getUTCDate()).slice(-2)}`)) {
                             var alamedaCases = null
                             alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].totalcountconfirmed
                             return alamedaCases
@@ -124,26 +125,31 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
                     alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].totalcountconfirmed
                     return alamedaCases
                 }
-            })
+            }, firstday)
             writeArray.push(alamedaCases)
             // console.log(JSON.parse(res.text).result.records[0].totalcountconfirmed)
 
             // superagent get previous entry's data and find difference between the req data and the prev entry data
+
             if (config.lastAccessDataNotComplete) {
                 var prevEntryDate = new Date(writtenWeeks[writtenWeeks.length - 2] + " 2021")
                 var first = prevEntryDate.getDate() - prevEntryDate.getDay() + 1; // First day is the day of the month - the day of the week        
-                var prevEntryFirstDate = new Date(curr.setDate(first)); // monday of that week, this is our req date
+                var prevEntryFirstDate = new Date(prevEntryDate.setDate(first)); // monday of that week, this is our req date
             } else {
                 var prevEntryDate = new Date(writtenWeeks[writtenWeeks.length - 1] + " 2021")
+                console.log(prevEntryDate)
                 var first = prevEntryDate.getDate() - prevEntryDate.getDay() + 1; // First day is the day of the month - the day of the week        
-                var prevEntryFirstDate = new Date(curr.setDate(first)); // monday of that week, this is our req date
+                var prevEntryFirstDate = new Date(prevEntryDate.setDate(first)); // monday of that week, this is our req date
             }
             await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${prevEntryFirstDate.getFullYear()}-${("0" + (prevEntryFirstDate.getUTCMonth() + 1)).slice(-2)}-${("0" + prevEntryFirstDate.getUTCDate()).slice(-2)}"}`)
             await page.waitForTimeout(1000)
-            var lastEntryCases = await page.evaluate(() => {
+            var lastEntryCases = await page.evaluate((prevEntryFirstDate) => {
+                console.log(prevEntryFirstDate)
+                var prevEntryFirstDate = new Date(prevEntryFirstDate)
+                console.log(`2nd`)
                 if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) {
                     for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                        if (JSON.parse(document.querySelector("body > pre").innerText).result.records[0].date.includes(`${prevEntryFirstDate.getFullYear()}-${("0" + (prevEntryFirstDate.getUTCMonth() + 1)).slice(-2)}-${("0" + prevEntryFirstDate.getUTCDate()).slice(-2)}`)) {
+                        if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${prevEntryFirstDate.getFullYear()}-${("0" + (prevEntryFirstDate.getUTCMonth() + 1)).slice(-2)}-${("0" + prevEntryFirstDate.getUTCDate()).slice(-2)}`)) {
                             var lastEntryCases = null
                             lastEntryCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].totalcountconfirmed
                             return lastEntryCases
@@ -154,11 +160,11 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
                     lastEntryCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].totalcountconfirmed
                     return lastEntryCases
                 }
-            })
+            }, prevEntryFirstDate)
             writeArray.push(writeArray[writeArray.length - 1] - lastEntryCases)
-            // console.log(JSON.parse(res.text))
+            // // console.log(JSON.parse(res.text))
 
-            console.log(writeArray)
+            // console.log(writeArray)
         }
 
         for (i = 0; i < writeArray.length; i++) { // convert numbers from the request to strings
@@ -166,7 +172,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
         }
 
 
-        // checking for data not compelte and pre to start writing
+        // // checking for data not compelte and pre to start writing
         if (config.lastAccessDataNotComplete) {
             console.log(`last wrritne record ${writtenWeeks[writtenWeeks.length - 1]}`)
             console.log(`this time week ${writeArray[0]}`)
@@ -208,10 +214,12 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
 
         await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
         await page.waitForTimeout(1000)
-        var alamedaCasesToday = await page.evaluate(() => {
+        var alamedaCasesToday = await page.evaluate((dayBefore) => {
+            var dayBefore = new Date(dayBefore)
+            console.log('3rd')
             if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) {
                 for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                    if (JSON.parse(document.querySelector("body > pre").innerText).result.records[0].date.includes(`${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}`)) {
+                    if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}`)) {
                         var alamedaCases = null
                         alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].totalcountconfirmed
                         return alamedaCases
@@ -222,7 +230,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
                 alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].totalcountconfirmed
                 return alamedaCases
             }
-        })
+        }, dayBefore)
 
         if (writtenWeeks[writtenWeeks.length - 1] == writeArray[0]) {
             noWrite = true
@@ -232,6 +240,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
             writeArray.push("" + alamedaCasesToday)
         }
 
+        console.log(writeArray)
         await page.goto(config.link);
         await page.waitForTimeout(5000)
         // await page.waitForTimeout(5000)
@@ -240,7 +249,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
         console.log(writtenWeeks[writtenWeeks.length - 1])
         console.log(writeArray[0])
         console.log(writtenWeeks[writtenWeeks.length - 1] != writeArray[0])
-        if (writtenWeeks[writtenWeeks.length - 1] != writeArray[0]) {
+        if (writtenWeeks[writtenWeeks.length - 1] != writeArray[0] && noWrite != true) {
             // config.lastAccessDataNotComplete = false
             for (i = 0; i < writtenWeeks.length + 2; i++) { // add 2 for the header & the blank row that needs to be entered
                 if (i + 1 != writtenWeeks.length + 2) { // not the last one
@@ -262,7 +271,7 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
             }
         } else if (noWrite) {
             for (i = 0; i < writtenWeeks.length + 2; i++) { // add 2 for the header & the blank row that needs to be entered
-                if (i + 1 != writtenWeeks.length + 2) { // not the last one
+                if (i + 1 != writtenWeeks.length + 1) { // not the last one
                     await page.keyboard.press('ArrowDown');
                     await page.waitForTimeout(100)
                 } else { // last one - exec write
