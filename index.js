@@ -1,6 +1,6 @@
 const schedule = require('node-schedule')
 // 0 0 */1 * *   */10 * * * *
-schedule.scheduleJob('0 0 */1 * *', async function () {
+// schedule.scheduleJob('0 0 */1 * *', async function () {
     const puppeteer = require('puppeteer');
     var config = require('./config.json');
     var writtenWeeks = require('./writtenWeeks.json');
@@ -314,4 +314,4 @@ schedule.scheduleJob('0 0 */1 * *', async function () {
         await browser.close();
     })();
 
-});
+// });
