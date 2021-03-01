@@ -2,3 +2,5 @@
 node_modules/
 
 config.json
+
+api/apiKeys.json
