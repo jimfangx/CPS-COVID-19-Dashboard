@@ -1,0 +1,37 @@
+[
+    {
+        "week": "<Month Text> <D || DD>, type: str",
+        "studentTests": "# of student tests, type: int cast to str",
+        "studentPositive": "# of student positive, type: int cast to str",
+        "studentPercPos": "% of students positive - in %; not converted to decimals, type: int cast to str",
+        "staffTests": "# of staff tests, type: int cast to str",
+        "staffPositive": "# of staff positive, type: int cast to str",
+        "staffPercPos": "% of staff positive - in %; not converted to decimals, type: int cast to str",
+        "totalTests": "# of total tests (staff + students), type: int cast to str",
+        "totalPositive": "# of total positives (staff + students), type: int cast to str",
+        "totalPercPos": "% of total positives (staff + students) - in %; not converted to decimals, type: int cast to str",
+        "alamedaTests": "# of tests in alameda on the monday of that week, type: int cast to str",
+        "alamedaCases": "# of cases in alameda on the monday of that week, type: int cast to str",
+        "alamedaCaseChange": "change in cases from prev week (this week alamedaCases - prev week alamedaCases), type: int cast to str",
+        "alamedaDailyTests": "# of tests in Alameda the day before - results updated at midnight each day so this is the # of tests at the end of the day, type: int cast to str",
+        "alamedaDailyCases": "# of cases in Alameda 2 days before - results are pulled form the API at midnight; Ex: 00:00 on Mar 1 pulls data from Feb 27"
+    },
+    {
+        "week": "February 16",
+        "studentTests": "199",
+        "studentPositive": "0",
+        "studentPercPos": "0",
+        "staffTests": "53",
+        "staffPositive": "0",
+        "staffPercPos": "0",
+        "totalTests": "252",
+        "totalPositive": "0",
+        "totalPercPos": "0",
+        "alamedaTests": "1817788",
+        "alamedaCases": "78647",
+        "alamedaCaseChange": "1912",
+        "alamedaDailyTests": "1942275",
+        "alamedaDailyCases": "80565"
+    }
+]
+// https://cps-covid-dashboard.wl.r.appspot.com/
