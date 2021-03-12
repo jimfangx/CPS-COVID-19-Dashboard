@@ -65,6 +65,7 @@ const superagent = require('superagent');
     await page.goto(config.dailyLink)
 
     var startDate = new Date('2020-12-20')
+    startDate.setHours(0,0,0,0)
     startDate.setDate(startDate.getDate() + 1)
     var endDate = new Date(alamedaResult.day) // set as alameda county's vac info date
     var diffTime = Math.abs(endDate - startDate);
