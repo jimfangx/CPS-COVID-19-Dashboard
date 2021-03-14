@@ -332,6 +332,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         fs.writeFile('config.json', JSON.stringify(config), function (err) {
             if (err) console.log(err)
         })
+<<<<<<< HEAD
     }
 
     console.log(writeArray)
@@ -362,6 +363,21 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
             "day": null,
             "firstDose": null,
             "secondDose": null
+=======
+        console.log(b117Cases)
+        await page.goto(config.dailyLink)
+
+        var startDate = new Date('2020-12-20')
+        startDate.setHours(0,0,0,0)
+        startDate.setDate(startDate.getDate() + 1)
+        var endDate = new Date(alamedaResult.day) // set as alameda county's vac info date
+        var diffTime = Math.abs(endDate - startDate);
+        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+        for (i = 0; i < diffDays+1; i++) {
+            await page.waitForTimeout(100)
+            page.keyboard.press('ArrowDown'); //  (+1) because then it ends up 1 row (day) before the day its run on due to the header taking up 1 row
+>>>>>>> main
         }
         var tableHolderDivChildNumber = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div").children.length // number of sections in the master table holder. rn its 2, could get larger. find the latest
 
