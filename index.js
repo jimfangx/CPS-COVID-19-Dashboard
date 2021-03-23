@@ -335,7 +335,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
                     if (err) console.log(err)
                 })
                 for (j = 0; j < 15; j++) {
-                    if (j != 8) {
+                    if ((j != 8) && (j!=11)) {
                         await page.keyboard.type(writeArray[j])
                         await page.waitForTimeout(500)
                         await page.keyboard.press('Tab');
