@@ -335,7 +335,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
                     if (err) console.log(err)
                 })
                 for (j = 0; j < 15; j++) {
-                    if ((j != 8) && (j!=11)) {
+                    if ((j != 8) && (j != 11)) {
                         await page.keyboard.type(writeArray[j])
                         await page.waitForTimeout(500)
                         await page.keyboard.press('Tab');
@@ -399,7 +399,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     for (i = 0; i < 100; i++) {
         await page.click("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div:nth-child(4) > div:nth-child(2)")
     }
-    await page.waitForTimeout(3000)
+    await page.waitForTimeout(5000)
     alamedaResult = await page.evaluate(() => {
         var returnArray = []
         var returnResult = {
@@ -409,19 +409,28 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         }
 
         var tableHolderDivChildNumber = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div").children.length // number of sections in the master table holder. rn its 2, could get larger. find the latest
-        for (i= 3; i>0; i--) { // get prev 3 days
-            var numberOfEntries = parseInt(document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(2)`).children.length)-i
+
+
+        for (i = 0; i < 3; i++) { // get prev 3 days
+
+            var numberOfEntries = parseInt(document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(2)`).children.length) - i
+
             returnResult.firstDose = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(1) > div:nth-child(${numberOfEntries})`).textContent
+
             returnResult.secondDose = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(2) > div:nth-child(${numberOfEntries})`).textContent
-    
-            var numberOfDates = parseInt(document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.rowHeaders > div").children.length)-i
+
+            var numberOfDates = parseInt(document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.rowHeaders > div").children.length) - i
             returnResult.day = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.rowHeaders > div > div:nth-child(${numberOfDates}) > div`).textContent
 
             returnArray.push(returnResult)
+            var returnResult = {
+                "day": null,
+                "firstDose": null,
+                "secondDose": null
+            }
         }
 
-        
-        return returnResult
+        return returnArray
     })
     console.log(alamedaResult)
 
@@ -446,31 +455,36 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     console.log(b117Cases)
     await page.goto(config.dailyLink)
 
-    var startDate = new Date('2020-12-20')
-    startDate.setDate(startDate.getDate() + 1)
-    var endDate = new Date(alamedaResult.day) // set as alameda county's vac info date
-    var diffTime = Math.abs(endDate - startDate);
-    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    for (z = 0; z < 3; z++) {
 
-    for (i = 0; i < diffDays + 1; i++) {
-        await page.waitForTimeout(100)
-        page.keyboard.press('ArrowDown'); //  (+1) because then it ends up 1 row (day) before the day its run on due to the header taking up 1 row
+        var startDate = new Date('2020-12-20')
+        startDate.setDate(startDate.getDate() + 1)
+        var endDate = new Date(alamedaResult[z].day) // set as alameda county's vac info date
+        var diffTime = Math.abs(endDate - startDate);
+        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+        for (i = 0; i < diffDays + 1; i++) {
+            await page.waitForTimeout(100)
+            page.keyboard.press('ArrowDown'); //  (+1) because then it ends up 1 row (day) before the day its run on due to the header taking up 1 row
+        }
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.type(alamedaResult[z].firstDose)
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.type(alamedaResult[z].secondDose)
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+
+        await page.waitForTimeout(3000)
+        //ca vaccine totals will be binded to b117 totals
+        page.reload() // reset pos to A1
+
     }
-    page.keyboard.press('ArrowRight')
-    await page.waitForTimeout(500)
-    page.keyboard.press('ArrowRight')
-    await page.waitForTimeout(500)
-    page.keyboard.type(alamedaResult.firstDose)
-    await page.waitForTimeout(500)
-    page.keyboard.press('ArrowRight')
-    await page.waitForTimeout(500)
-    page.keyboard.type(alamedaResult.secondDose)
-    await page.waitForTimeout(500)
-    page.keyboard.press('ArrowRight')
 
-    await page.waitForTimeout(3000)
-    //ca vaccine totals will be binded to b117 totals
-    page.reload() // reset pos to A1
     await page.waitForTimeout(5000)
 
     endDate = new Date()

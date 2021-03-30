@@ -37,24 +37,80 @@ const superagent = require('superagent');
         }
 
         var tableHolderDivChildNumber = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div").children.length // number of sections in the master table holder. rn its 2, could get larger. find the latest
-        console.log("tableHolderDivChildNumber"+tableHolderDivChildNumber)
+
+
         for (i = 0; i < 3; i++) { // get prev 3 days
-            console.log("i"+i)
+
             var numberOfEntries = parseInt(document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(2)`).children.length) - i
-            console.log("numberOfEntries"+numberOfEntries)
+
             returnResult.firstDose = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(1) > div:nth-child(${numberOfEntries})`).textContent
-            console.log(returnResult.firstDose)
+
             returnResult.secondDose = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.bodyCells > div > div:nth-child(${tableHolderDivChildNumber}) > div:nth-child(2) > div:nth-child(${numberOfEntries})`).textContent
 
             var numberOfDates = parseInt(document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.rowHeaders > div").children.length) - i
             returnResult.day = document.querySelector(`#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.fitToScreen > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(2) > transform > div > div:nth-child(3) > div > detail-visual-modern > div > visual-modern > div > div > div.pivotTable > div.innerContainer > div.rowHeaders > div > div:nth-child(${numberOfDates}) > div`).textContent
 
             returnArray.push(returnResult)
+            var returnResult = {
+                "day": null,
+                "firstDose": null,
+                "secondDose": null
+            }
         }
 
-        console.log(returnResult)
-        return returnResult
+        return returnArray
     })
     console.log(alamedaResult)
+
+    await page.goto(`https://covid.cdc.gov/covid-data-tracker/#vaccinations`)
+    await page.waitForTimeout(5000)
+    cdcCAStateVacTotals = await page.evaluate(() => {
+        return document.querySelector("#vaccinations-table > tbody > tr:nth-child(7) > td:nth-child(2)").innerText
+    })
+    console.log(cdcCAStateVacTotals)
+
+    await page.goto(`https://www.cdc.gov/coronavirus/2019-ncov/transmission/variant-cases.html`)
+    await page.waitForTimeout(5000)
+    b117Cases = await page.evaluate(() => {
+        var returnB117 = {
+            "usTotal": null,
+            "caTotal": null
+        }
+        returnB117.usTotal = document.querySelector("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)").innerText
+        returnB117.caTotal = document.querySelector("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > div:nth-child(2) > div > div.wcms-viz-container > div > section > section.data-table-container.md > table > tbody > tr:nth-child(6) > td:nth-child(2)").innerText
+        return returnB117
+    })
+    console.log(b117Cases)
+    await page.goto(config.dailyLink)
+
+    for (z = 0; z < 3; z++) {
+
+        var startDate = new Date('2020-12-20')
+        startDate.setDate(startDate.getDate() + 1)
+        var endDate = new Date(alamedaResult[z].day) // set as alameda county's vac info date
+        var diffTime = Math.abs(endDate - startDate);
+        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+        for (i = 0; i < diffDays + 1; i++) {
+            await page.waitForTimeout(100)
+            page.keyboard.press('ArrowDown'); //  (+1) because then it ends up 1 row (day) before the day its run on due to the header taking up 1 row
+        }
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.type(alamedaResult[z].firstDose)
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+        await page.waitForTimeout(500)
+        page.keyboard.type(alamedaResult[z].secondDose)
+        await page.waitForTimeout(500)
+        page.keyboard.press('ArrowRight')
+
+        await page.waitForTimeout(3000)
+        //ca vaccine totals will be binded to b117 totals
+        page.reload() // reset pos to A1
+        await page.waitForTimeout(8000)
+    }
 
 })();
