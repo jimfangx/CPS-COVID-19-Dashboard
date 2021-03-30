@@ -482,7 +482,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         await page.waitForTimeout(3000)
         //ca vaccine totals will be binded to b117 totals
         page.reload() // reset pos to A1
-
+        await page.waitForTimeout(8000)
     }
 
     await page.waitForTimeout(5000)
