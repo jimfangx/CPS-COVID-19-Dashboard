@@ -2,6 +2,7 @@
 
 An Unofficial COVID-19 Data Visualization Dashboard created for College Prep made using [Puppeteer](https://pptr.dev) and [Tableau](https://www.tableau.com/).
 
+Please don't use this code as exemplars! This is absolute spaghetti. :( Check out my other repos for cleaner code.
 
 # Build from source
 

@@ -114,63 +114,63 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         // writeArray.push(numTests) // dont do this - store it in a json file with the exec date's weeek's monday as the key. then push the value that correspondes with the writtearray date to writtearray
         // console.log(writeArray)
 
-
-        // await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getUTCMonth() + 1)).slice(-2)}-${("0" + firstday.getUTCDate()).slice(-2)}"}`)
-        // await page.waitForTimeout(1000)
-        // var alamedaCases = await page.evaluate((firstday) => {
-        //     var firstday = new Date(firstday) // need to create new date obj
-        //     if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) {
-        //         for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-        //             if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstday.getFullYear()}-${("0" + (firstday.getUTCMonth() + 1)).slice(-2)}-${("0" + firstday.getUTCDate()).slice(-2)}`)) {
-        //                 var alamedaCases = null
-        //                 alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].totalcountconfirmed
-        //                 return alamedaCases
-        //             }
-        //         }
-        //     } else {
-        //         var alamedaCases = null
-        //         alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].totalcountconfirmed
-        //         return alamedaCases
-        //     }
-        // }, firstday)
-        // writeArray.push(alamedaCases)
+        // get alameda cases (total)
+        await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}"}`)
+        await page.waitForTimeout(1000)
+        var alamedaCases = await page.evaluate((firstday) => {
+            var firstdayInternal = new Date(firstday) // need to create new date obj
+            if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
+                for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
+                    if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstdayInternal.getFullYear()}-${("0" + (firstdayInternal.getMonth() + 1)).slice(-2)}-${("0" + firstdayInternal.getDate()).slice(-2)}`)) {
+                        var alamedaCases = null
+                        alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
+                        return alamedaCases
+                    }
+                }
+            } else {
+                var alamedaCases = null
+                alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
+                return alamedaCases
+            }
+        }, firstday)
+        writeArray.push(alamedaCases)
 
         // get change in cases
-        console.log(`asdfja ${firstday.toDateString()}`)
-        var alamedaCases = null;
-        for (i = 0; i <= 7; i++) {
-            await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}"}`)
-            page.waitForTimeout(1000)
-            var tempAlamedaCases = await page.evaluate((firstday) => {
-                var firstdayInternal = new Date(firstday)
-                if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
-                    for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                        if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstdayInternal.getFullYear()}-${("0" + (firstdayInternal.getMonth() + 1)).slice(-2)}-${("0" + firstdayInternal.getDate()).slice(-2)}`)) {
-                            var alamedaCases = null
-                            alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cases
-                            return alamedaCases
-                        }
-                    }
-                } else {
-                    var alamedaCases = null
-                    alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cases
-                    return alamedaCases
-                }
-            }, firstday)
-            alamedaCases += parseInt(tempAlamedaCases)
-            firstday.setDate(firstday.getDate() - 1)
-        }
-        console.log(alamedaCases)
+        // console.log(`asdfja ${firstday.toDateString()}`)
+        // var alamedaCases = null;
+        // for (i = 0; i <= 7; i++) {
+        //     await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}"}`)
+        //     page.waitForTimeout(1000)
+        //     var tempAlamedaCases = await page.evaluate((firstday) => {
+        //         var firstdayInternal = new Date(firstday)
+        //         if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
+        //             for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
+        //                 if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstdayInternal.getFullYear()}-${("0" + (firstdayInternal.getMonth() + 1)).slice(-2)}-${("0" + firstdayInternal.getDate()).slice(-2)}`)) {
+        //                     var alamedaCases = null
+        //                     alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
+        //                     return alamedaCases
+        //                 }
+        //             }
+        //         } else {
+        //             var alamedaCases = null
+        //             alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
+        //             return alamedaCases
+        //         }
+        //     }, firstday)
+        //     alamedaCases += parseInt(tempAlamedaCases)
+        //     firstday.setDate(firstday.getDate() - 1)
+        // }
+        // console.log(alamedaCases)
 
-        // then add to prev wk's numbers
-        var nonChangedFirstDate = new Date(`${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}`)
-        nonChangedFirstDate.setDate(nonChangedFirstDate.getDate() + 7)
-        // first day is actually now the prev monday
-        alamedaCasesWeekly[monthNames[nonChangedFirstDate.getMonth()] + " " + nonChangedFirstDate.getDate()] = parseInt(alamedaCasesWeekly[monthNames[firstday.getUTCMonth()] + " " + firstday.getUTCDate()]) + parseInt(alamedaCases)
-        fs.writeFile('alamedaCasesWeekly.json', JSON.stringify(alamedaCasesWeekly), function (err) {
-            if (err) console.log(err)
-        })
-        writeArray.push(alamedaCasesWeekly[monthNames[nonChangedFirstDate.getMonth()] + " " + nonChangedFirstDate.getDate()])
+        // // then add to prev wk's numbers
+        // var nonChangedFirstDate = new Date(`${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}`)
+        // nonChangedFirstDate.setDate(nonChangedFirstDate.getDate() + 7)
+        // // first day is actually now the prev monday
+        // alamedaCasesWeekly[monthNames[nonChangedFirstDate.getMonth()] + " " + nonChangedFirstDate.getDate()] = parseInt(alamedaCasesWeekly[monthNames[firstday.getUTCMonth()] + " " + firstday.getUTCDate()]) + parseInt(alamedaCases)
+        // fs.writeFile('alamedaCasesWeekly.json', JSON.stringify(alamedaCasesWeekly), function (err) {
+        //     if (err) console.log(err)
+        // })
+        // writeArray.push(alamedaCasesWeekly[monthNames[nonChangedFirstDate.getMonth()] + " " + nonChangedFirstDate.getDate()])
 
         // console.log(JSON.parse(res.text).result.records[0].totalcountconfirmed)
 
@@ -289,22 +289,21 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
             for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
                 if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${dayBeforeInternal.getFullYear()}-${("0" + (dayBeforeInternal.getMonth() + 1)).slice(-2)}-${("0" + dayBeforeInternal.getDate()).slice(-2)}`)) {
                     var alamedaCases = null
-                    alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cases
+                    alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
                     return alamedaCases
                 }
             }
         } else {
             var alamedaCases = null
-            alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cases
+            alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
             return alamedaCases
         }
     }, dayBefore)
-    alamedaCasesDaily[alamedaCasesDaily.length - 1] = parseInt(alamedaCasesDaily[alamedaCasesDaily.length - 1]) + parseInt(alamedaCasesToday)
-    fs.writeFile('alamedaCasesDaily.json', JSON.stringify(alamedaCasesDaily), function (err) {
-        if (err) console.log(err)
-    })
-    alamedaCasesToday = alamedaCasesDaily[alamedaCasesDaily.length - 1]
-
+    // alamedaCasesDaily[alamedaCasesDaily.length - 1] = parseInt(alamedaCasesDaily[alamedaCasesDaily.length - 1]) + parseInt(alamedaCasesToday)
+    // fs.writeFile('alamedaCasesDaily.json', JSON.stringify(alamedaCasesDaily), function (err) {
+    //     if (err) console.log(err)
+    // })
+    // alamedaCasesToday = alamedaCasesDaily[alamedaCasesDaily.length - 1]
 
     if (writtenWeeks[writtenWeeks.length - 1] == writeArray[0]) {
         noWrite = true
@@ -335,7 +334,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
                     if (err) console.log(err)
                 })
                 for (j = 0; j < 15; j++) {
-                    if ((j != 8) && (j != 11)) {
+                    if ((j != 8) && (j != 12)) {
                         await page.keyboard.type(writeArray[j])
                         await page.waitForTimeout(500)
                         await page.keyboard.press('Tab');
