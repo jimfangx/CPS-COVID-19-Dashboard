@@ -5,7 +5,7 @@ const superagent = require('superagent');
 const fs = require('fs');
 var writeList = []
 
-schedule.scheduleJob('5 0 */1 * *', async function () {
+// schedule.scheduleJob('5 0 */1 * *', async function () {
     superagent
         .post(`https://wabi-us-gov-iowa-api.analysis.usgovcloudapi.net/public/reports/querydata/`)
         .set('X-PowerBI-ResourceKey', `36ad0543-b589-45cb-9bbe-ecfc8b42bcab`)
@@ -61,29 +61,29 @@ schedule.scheduleJob('5 0 */1 * *', async function () {
         await page.waitForTimeout(500)
         for (i = 0; i < writeData.length; i++) {
             page.keyboard.press('ArrowRight')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowRight')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.type("" + (writeData[i].atLeastOneDose))
             await page.waitForTimeout(500)
             page.keyboard.press('ArrowRight')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.type("" + (writeData[i].fullyVaccinated))
             await page.waitForTimeout(500)
             page.keyboard.press('ArrowRight')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowDown')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowLeft')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowLeft')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowLeft')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
             page.keyboard.press('ArrowLeft')
-            await page.waitForTimeout(60)
+            await page.waitForTimeout(100)
         }
 
         await browser.close();
     })
-});
+// });
