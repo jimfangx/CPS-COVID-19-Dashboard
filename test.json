@@ -1,31 +1,95 @@
-{"error":{"code":"BadRequest","message":"Bad Request","details":[{"message":"Error converting value \"{\n        \"version\": \"1.0.0\",\n        \"queries\": [\n          {\n            \"Query\": {\n              \"Commands\": [\n  
-    {\n                  \"SemanticQueryDataShapeCommand\": {\n                    \"Query\": {\n          
-  \"Version\": 2,\n                      \"From\": [\n                        {\n                          
-\"Name\": \"v\",\n                          \"Entity\": \"V_Vaccine_Data\",\n                          \"Type\": 0\n                        }\n                      ],\n                      \"Select\": [\n                        {\n 
-               \"Column\": {\n                            \"Expression\": {\n                              
-\"SourceRef\": {\n                                \"Source\": \"v\"\n                              }\n               
-   },\n                            \"Property\": \"ADMIN_DATE\"\n                          },\n            
-    \"Name\": \"V_Vaccine_Data.ADMIN_DATE\"\n                        },\n                        {\n                          \"Measure\": {\n                            \"Expression\": {\n                              \"SourceRef\": {\n                                \"Source\": \"v\"\n                              }\n                    
-},\n                            \"Property\": \"FullyVaccinated\"\n                          },\n            
-    \"Name\": \"V_Vaccine_Data.FullyVaccinated\"\n                        },\n                        {\n  
-              \"Measure\": {\n                            \"Expression\": {\n                              
-\"SourceRef\": {\n                                \"Source\": \"v\"\n                              }\n               
-   },\n                            \"Property\": \"At Least One Dose\"\n                          },\n     
-           \"Name\": \"V_Vaccine_Data.At Least One Dose\"\n                        }\n                     
-],\n                      \"Where\": [\n                        {\n                          \"Condition\": {\n                            \"And\": {\n                              \"Left\": {\n                                \"Comparison\": {\n                                  \"ComparisonKind\": 2,\n                                  \"Left\": {\n                                    \"Column\": {\n                                      \"Expression\": {\n         
-                     \"SourceRef\": {\n                                          \"Source\": \"v\"\n                                        }\n                                      },\n                                      \"Property\": \"ADMIN_DATE\"\n                                    }\n                                  },\n           
-             \"Right\": {\n                                    \"DateSpan\": {\n                           
- \"Expression\": {\n                                        \"Literal\": {\n                               
- \"Value\": \"datetime'2020-12-14T00:00:00'\"\n                                        }\n                 
-           },\n                                      \"TimeUnit\": 5\n                                    }\n                                  }\n                                }\n                              },\n         
-           \"Right\": {\n                                \"Comparison\": {\n                               
-\"ComparisonKind\": 4,\n                                  \"Left\": {\n                                    \"Column\": {\n                                      \"Expression\": {\n                                        \"SourceRef\": {\n                                          \"Source\": \"v\"\n                                        }\n       
-                     },\n                                      \"Property\": \"ADMIN_DATE\"\n              
-            }\n                                  },\n                                  \"Right\": {\n      
-                    \"DateSpan\": {\n                                      \"Expression\": {\n             
-                 \"Literal\": {\n                                          \"Value\": \"datetime'2021-06-30T00:00:00'\"\n                                        }\n                                      },\n                  
-          \"TimeUnit\": 5\n                                    }\n                                  }\n    
-                  }\n                              }\n                            }\n                      
-}\n                        }\n                      ]\n                    },\n                    \"Binding\": {\n                      \"Primary\": {\n                        \"Groupings\": [\n                          {\n                            \"Projections\": [\n                              0,\n                              1,\n                              2\n                            ]\n                          }\n                        ]\n                      },\n                      \"DataReduction\": {\n                        \"DataVolume\": 4,\n       
-       \"Primary\": {\n                          \"Sample\": {}\n                        }\n               
-},\n                      \"Version\": 1\n                    }\n                  }\n                }\n              ]\n            },\n            \"CacheKey\": \"{\"Commands\":[{\"SemanticQueryDataShapeCommand\":{\"Query\":{\"Version\":2,\"From\":[{\"Name\":\"v\",\"Entity\":\"V_Vaccine_Data\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"v\"}},\"Property\":\"ADMIN_DATE\"},\"Name\":\"V_Vaccine_Data.ADMIN_DATE\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"v\"}},\"Property\":\"FullyVaccinated\"},\"Name\":\"V_Vaccine_Data.FullyVaccinated\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"v\"}},\"Property\":\"At Least One Dose\"},\"Name\":\"V_Vaccine_Data.At Least One Dose\"}],\"Where\":[{\"Condition\":{\"And\":{\"Left\":{\"Comparison\":{\"ComparisonKind\":2,\"Left\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"v\"}},\"Property\":\"ADMIN_DATE\"}},\"Right\":{\"DateSpan\":{\"Expression\":{\"Literal\":{\"Value\":\"datetime'2020-12-14T00:00:00'\"}},\"TimeUnit\":5}}}},\"Right\":{\"Comparison\":{\"ComparisonKind\":4,\"Left\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"v\"}},\"Property\":\"ADMIN_DATE\"}},\"Right\":{\"DateSpan\":{\"Expression\":{\"Literal\":{\"Value\":\"datetime'2021-06-30T00:00:00'\"}},\"TimeUnit\":5}}}}}}}]},\"Binding\":{\"Primary\":{\"Groupings\":[{\"Projections\":[0,1,2]}]},\"DataReduction\":{\"DataVolume\":4,\"Primary\":{\"Sample\":{}}},\"Version\":1}}}]}\",\n            \"QueryId\": \"\",\n            \"ApplicationContext\": {\n              \"DatasetId\": \"aa215ad2-108a-4851-97fa-d8d6af046e5e\",\n              \"Sources\": [\n                {\n                  \"ReportId\": \"174afba8-d59c-47ff-8b90-08d3b6a620db\"\n                }\n              ]\n            }\n          }\n        ],\n        \"cancelQueries\": [],\n        \"modelId\": 320004\n      }\" to type 'Microsoft.InfoNav.Explore.ServiceContracts.Internal.ExecuteSemanticQueryRequest'. Path '', line 1, position 7297.","target":"request"}]}}
+{
+        "help": "https://data.chhs.ca.gov/api/3/action/help_show?name=datastore_search",
+        "success": true,
+        "result": {
+                "include_total": true,
+                "resource_id": "046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a",
+                "fields": [
+                        {
+                                "type": "int",
+                                "id": "_id"
+                        },
+                        {
+                                "type": "text",
+                                "id": "date"
+                        },
+                        {
+                                "type": "text",
+                                "id": "area"
+                        },
+                        {
+                                "type": "text",
+                                "id": "area_type"
+                        },
+                        {
+                                "type": "text",
+                                "id": "population"
+                        },
+                        {
+                                "type": "text",
+                                "id": "cases"
+                        },
+                        {
+                                "type": "text",
+                                "id": "deaths"
+                        },
+                        {
+                                "type": "text",
+                                "id": "total_tests"
+                        },
+                        {
+                                "type": "text",
+                                "id": "positive_tests"
+                        },
+                        {
+                                "type": "text",
+                                "id": "reported_cases"
+                        },
+                        {
+                                "type": "text",
+                                "id": "reported_deaths"
+                        },
+                        {
+                                "type": "text",
+                                "id": "reported_tests"
+                        },
+                        {
+                                "type": "float",
+                                "id": "rank date"
+                        },
+                        {
+                                "type": "float",
+                                "id": "rank area"
+                        }
+                ],
+                "records_format": "objects",
+                "q": {
+                        "date": "2021-04-06",
+                        "area": "alameda"
+                },
+                "records": [
+                        {
+                                "rank date": 0.211562,
+                                "area": "Alameda",
+                                "deaths": "0.0",
+                                "rank area": 0.0573088,
+                                "reported_cases": "84.0",
+                                "area_type": "County",
+                                "reported_deaths": "4.0",
+                                "total_tests": "4417.0",
+                                "reported_tests": "8444.0",
+                                "date": "2021-04-06",
+                                "cases": "49.0",
+                                "_id": 123,
+                                "positive_tests": "50.0",
+                                "population": "1685886.0"
+                        }
+                ],
+                "limit": 100,
+                "_links": {
+                        "start": "/api/3/action/datastore_search?q=%7B%22area%22%3A%22alameda%22%2C%22date%22%3A%222021-04-06%22%7D&resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a",
+                        "next": "/api/3/action/datastore_search?q=%7B%22area%22%3A%22alameda%22%2C%22date%22%3A%222021-04-06%22%7D&offset=100&resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a"
+                },
+                "total": 1
+        }
+}

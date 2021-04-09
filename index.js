@@ -105,7 +105,17 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
                 if (err) console.log(err)
             })
 
-
+            await page.goto(`https://app.powerbigov.us/view?r=eyJrIjoiZTE0YmM1NzUtNDA2NC00ODY4LWFhMmYtNmQ0ZTI5MzlhM2YyIiwidCI6IjMyZmRmZjJjLWY4NmUtNGJhMy1hNDdkLTZhNDRhN2Y0NWE2NCJ9`)
+            await page.waitForTimeout(5000)
+            var alamedaCases = await page.evaluate(() => {
+                var returnAlamedaCases = null
+                returnAlamedaCases = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
+                return returnAlamedaCases
+            })
+            alamedaCasesWeekly[monthNames[todayDate.getMonth()] + " " + todayDate.getDate()] = alamedaCases
+            fs.writeFile('alamedaCasesWeekly.json', JSON.stringify(alamedaCasesWeekly), function (err) {
+                if (err) console.log(err)
+            })
 
         }
 
@@ -115,25 +125,25 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         // console.log(writeArray)
 
         // get alameda cases (total)
-        await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}"}`)
-        await page.waitForTimeout(1000)
-        var alamedaCases = await page.evaluate((firstday) => {
-            var firstdayInternal = new Date(firstday) // need to create new date obj
-            if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
-                for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                    if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstdayInternal.getFullYear()}-${("0" + (firstdayInternal.getMonth() + 1)).slice(-2)}-${("0" + firstdayInternal.getDate()).slice(-2)}`)) {
-                        var alamedaCases = null
-                        alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
-                        return alamedaCases
-                    }
-                }
-            } else {
-                var alamedaCases = null
-                alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
-                return alamedaCases
-            }
-        }, firstday)
-        writeArray.push(alamedaCases)
+        // await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${firstday.getFullYear()}-${("0" + (firstday.getMonth() + 1)).slice(-2)}-${("0" + firstday.getDate()).slice(-2)}"}`)
+        // await page.waitForTimeout(1000)
+        // var alamedaCases = await page.evaluate((firstday) => {
+        //     var firstdayInternal = new Date(firstday) // need to create new date obj
+        //     if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
+        //         for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
+        //             if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${firstdayInternal.getFullYear()}-${("0" + (firstdayInternal.getMonth() + 1)).slice(-2)}-${("0" + firstdayInternal.getDate()).slice(-2)}`)) {
+        //                 var alamedaCases = null
+        //                 alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
+        //                 return alamedaCases
+        //             }
+        //         }
+        //     } else {
+        //         var alamedaCases = null
+        //         alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
+        //         return alamedaCases
+        //     }
+        // }, firstday)
+        // writeArray.push(alamedaCases)
 
         // get change in cases
         // console.log(`asdfja ${firstday.toDateString()}`)
@@ -261,6 +271,15 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         return numTests
     })
 
+    // push alamedaDailyCases
+
+    await page.goto(`https://app.powerbigov.us/view?r=eyJrIjoiZTE0YmM1NzUtNDA2NC00ODY4LWFhMmYtNmQ0ZTI5MzlhM2YyIiwidCI6IjMyZmRmZjJjLWY4NmUtNGJhMy1hNDdkLTZhNDRhN2Y0NWE2NCJ9`)
+    await page.waitForTimeout(5000)
+    var alamedaCasesToday = await page.evaluate(() => {
+        var returnAlamedaCasesToday = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
+        return returnAlamedaCasesToday
+    })
+    
     // await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
     // await page.waitForTimeout(1000)
     // var alamedaCasesToday = await page.evaluate((dayBefore) => {
@@ -281,24 +300,26 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     //     }
     // }, dayBefore)
 
-    await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
-    page.waitForTimeout(1000)
-    var alamedaCasesToday = await page.evaluate((dayBefore) => {
-        var dayBeforeInternal = new Date(dayBefore)
-        if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
-            for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
-                if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${dayBeforeInternal.getFullYear()}-${("0" + (dayBeforeInternal.getMonth() + 1)).slice(-2)}-${("0" + dayBeforeInternal.getDate()).slice(-2)}`)) {
-                    var alamedaCases = null
-                    alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
-                    return alamedaCases
-                }
-            }
-        } else {
-            var alamedaCases = null
-            alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
-            return alamedaCases
-        }
-    }, dayBefore)
+    // console.log(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
+
+    // await page.goto(`https://data.chhs.ca.gov/api/3/action/datastore_search?resource_id=046cdd2b-31e5-4d34-9ed3-b48cdbc4be7a&q={"area":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
+    // page.waitForTimeout(1000)
+    // var alamedaCasesToday = await page.evaluate((dayBefore) => {
+    //     var dayBeforeInternal = new Date(dayBefore)
+    //     if (JSON.parse(document.querySelector("body > pre").innerText).result.records.length > 1) { // multiple dates, check against firstday
+    //         for (x = 0; x < JSON.parse(document.querySelector("body > pre").innerText).result.records.length; x++) {
+    //             if (JSON.parse(document.querySelector("body > pre").innerText).result.records[x].date.includes(`${dayBeforeInternal.getFullYear()}-${("0" + (dayBeforeInternal.getMonth() + 1)).slice(-2)}-${("0" + dayBeforeInternal.getDate()).slice(-2)}`)) {
+    //                 var alamedaCases = null
+    //                 alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[x].cumulative_cases
+    //                 return alamedaCases
+    //             }
+    //         }
+    //     } else {
+    //         var alamedaCases = null
+    //         alamedaCases = JSON.parse(document.querySelector("body > pre").innerText).result.records[0].cumulative_cases
+    //         return alamedaCases
+    //     }
+    // }, dayBefore)
     // alamedaCasesDaily[alamedaCasesDaily.length - 1] = parseInt(alamedaCasesDaily[alamedaCasesDaily.length - 1]) + parseInt(alamedaCasesToday)
     // fs.writeFile('alamedaCasesDaily.json', JSON.stringify(alamedaCasesDaily), function (err) {
     //     if (err) console.log(err)
@@ -456,8 +477,8 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 
     // for (z = 0; z < 3; z++) {
 
-    //     var startDate = new Date('2020-12-20')
-    //     startDate.setDate(startDate.getDate() + 1)
+    var startDate = new Date('2020-12-20')
+    startDate.setDate(startDate.getDate() + 1)
     //     var endDate = new Date(alamedaResult[z].day) // set as alameda county's vac info date
     //     var diffTime = Math.abs(endDate - startDate);
     //     var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
