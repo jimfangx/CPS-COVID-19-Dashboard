@@ -453,7 +453,8 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     //     return returnArray
     // })
     // console.log(alamedaResult)
-
+    await page.waitForTimeout(5000)
+    
     await page.goto(`https://covid.cdc.gov/covid-data-tracker/#vaccinations`)
     await page.waitForTimeout(5000)
     cdcCAStateVacTotals = await page.evaluate(() => {
