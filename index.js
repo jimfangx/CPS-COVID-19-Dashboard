@@ -279,7 +279,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         var returnAlamedaCasesToday = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
         return returnAlamedaCasesToday
     })
-    
+
     // await page.goto(`https://data.ca.gov/api/3/action/datastore_search?resource_id=926fd08f-cc91-4828-af38-bd45de97f8c3&q={"county":"alameda","date":"${dayBefore.getFullYear()}-${("0" + (dayBefore.getMonth() + 1)).slice(-2)}-${("0" + dayBefore.getDate()).slice(-2)}"}`)
     // await page.waitForTimeout(1000)
     // var alamedaCasesToday = await page.evaluate((dayBefore) => {
@@ -356,7 +356,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
                 })
                 for (j = 0; j < 15; j++) {
                     if ((j != 8) && (j != 12)) {
-                        await page.keyboard.type(writeArray[j])
+                        await page.keyboard.type("" + writeArray[j])
                         await page.waitForTimeout(500)
                         await page.keyboard.press('Tab');
                         await page.waitForTimeout(500)
@@ -454,7 +454,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     // })
     // console.log(alamedaResult)
     await page.waitForTimeout(5000)
-    
+
     await page.goto(`https://covid.cdc.gov/covid-data-tracker/#vaccinations`)
     await page.waitForTimeout(5000)
     cdcCAStateVacTotals = await page.evaluate(() => {
