@@ -84,12 +84,12 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 
     if (writeArray[0] === writtenWeeks[writtenWeeks.length - 1]) {
         // the same as last week, no new data. just delete last week's entry in writtenweeks
-        writtenWeeks = writtenWeeks.splice(writtenWeeks.length - 1, 1)
+        writtenWeeks.splice(-1, 1)
+        console.log(writtenWeeks)
         fs.writeFile('writtenWeeks.json', JSON.stringify(writtenWeeks), function (err) {
             if (err) console.log(err)
         })
-        delete require.cache[require.resolve('./writtenWeeks.json')] // Deleting loaded module
-        writtenWeeks = require('./writtenWeeks.json');
+
     } // if different from last weeks - new data was entered. do nothing. it will get taken care of in the writing segment
 
     if (config.lastAccessDataNotComplete) {
@@ -198,8 +198,8 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
             fs.writeFile('writtenWeeks.json', JSON.stringify(writtenWeeks), function (err) {
                 if (err) console.log(err)
             })
-            delete require.cache[require.resolve('./writtenWeeks.json')] // Deleting loaded module
-            writtenWeeks = require('./writtenWeeks.json');
+            // delete require.cache[require.resolve('./writtenWeeks.json')] // Deleting loaded module
+            // writtenWeeks = require('./writtenWeeks.json');
             for (j = 0; j < writeArray.length; j++) {
                 if (writeArray[j] === "") { // field auto calced by sheets - skip
                     await page.keyboard.press('Tab');
