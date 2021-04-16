@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "AirFusion45",
+  "repository": "https://github.com/AirFusion45/CPS-COVID-19-Dashboard",
   "license": "MIT",
   "dependencies": {
     "node-schedule": "^1.3.2",
