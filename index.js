@@ -186,6 +186,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     writeArray.push("" + numTestsDaily) // push column N - Alameda daily tests (update daily)
     writeArray.push("" + alamedaCasesToday) // push column column O - Alameda daily cases (updated daily)
 
+
     await page.goto(config.link);
     await page.waitForTimeout(5000)
 
@@ -227,7 +228,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
     var cdcCAStateVacTotals = null
     var b117Cases = null
 
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(20000) // prcautionary timeout to prevent the google doc from not saying and showing an err
 
     await page.goto(`https://covid.cdc.gov/covid-data-tracker/#vaccinations`)
     await page.waitForTimeout(5000)
@@ -247,6 +248,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
         return returnB117
     })
 
+    await page.waitForTimeout(5000) // add precautionary timeout
     await page.goto(config.dailyLink)
     var startDate = new Date('2020-12-20')
     startDate.setDate(startDate.getDate() + 1)
