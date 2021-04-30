@@ -273,17 +273,17 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
         return document.querySelector("#vaccinations-table > tbody > tr:nth-child(7) > td:nth-child(2)").innerText
     })
 
-    await page.goto(`https://www.cdc.gov/coronavirus/2019-ncov/transmission/variant-cases.html`)
-    await page.waitForTimeout(5000)
-    b117Cases = await page.evaluate(() => {
-        var returnB117 = {
-            "usTotal": null,
-            "caTotal": null
-        }
-        returnB117.usTotal = document.querySelector("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2)").innerText
-        returnB117.caTotal = document.querySelector("body > div.container.d-flex.flex-wrap.body-wrapper.bg-white > main > div:nth-child(3) > div > div.syndicate > div:nth-child(2) > div > div.wcms-viz-container > div > section > section.data-table-container.md > table > tbody > tr:nth-child(6) > td:nth-child(2)").innerText
-        return returnB117
-    })
+    await page.goto(`https://public.tableau.com/profile/strain.surv#!/vizhome/State_Proportions_table/StateProportionsDash`)
+    await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: './'});
+    await page.waitForTimeout(2500)
+    await page.click(`#download-ToolbarButton > span.tabToolbarButtonImg.tab-icon-download`)
+    await page.waitForTimeout(2000)
+    await page.click(`#DownloadDialog-Dialog-Body-Id > div > fieldset > button:nth-child(4)`)
+    await page.waitForTimeout(2000)
+    await page.click(`#export-crosstab-options-dialog-Dialog-BodyWrapper-Dialog-Body-Id > div > div.foyjxgp > div:nth-child(2) > div > label:nth-child(2) > input`)
+    await page.waitForTimeout(2000)
+    await page.click(`#export-crosstab-options-dialog-Dialog-BodyWrapper-Dialog-Body-Id > div > div.fdr6v0d > button`)
+
 
     await page.waitForTimeout(5000) // add precautionary timeout
     await page.goto(config.dailyLink)
