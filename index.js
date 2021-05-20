@@ -208,7 +208,7 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
     var numTestsDaily = null
     numTestsDaily = await page.evaluate(() => {
         var numTests = null
-        numTests = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
+        numTests = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(4) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
         return numTests
     })
 
@@ -216,7 +216,7 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
     await page.goto(`https://app.powerbigov.us/view?r=eyJrIjoiZTE0YmM1NzUtNDA2NC00ODY4LWFhMmYtNmQ0ZTI5MzlhM2YyIiwidCI6IjMyZmRmZjJjLWY4NmUtNGJhMy1hNDdkLTZhNDRhN2Y0NWE2NCJ9`) // alameda cases board
     await page.waitForTimeout(5000)
     var alamedaCasesToday = await page.evaluate(() => {
-        var returnAlamedaCasesToday = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
+        var returnAlamedaCasesToday = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(4) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
         return returnAlamedaCasesToday
     })
 
@@ -263,7 +263,7 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
     // ----------------- Varients & Vaccine Updater - Sheet #2 -----------------
 
     var cdcCAStateVacTotals = null
-    var b117Cases = null
+    var p1Variant = null
 
     await page.waitForTimeout(20000) // prcautionary timeout to prevent the google doc from not saying and showing an err
 
@@ -272,18 +272,43 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
     cdcCAStateVacTotals = await page.evaluate(() => {
         return document.querySelector("#vaccinations-table > tbody > tr:nth-child(7) > td:nth-child(2)").innerText
     })
+    await page.waitForTimeout(3000)
 
-    await page.goto(`https://public.tableau.com/profile/strain.surv#!/vizhome/State_Proportions_table/StateProportionsDash`)
-    await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: './'});
+
+    await page.goto(`https://public.tableau.com/views/State_Proportions_table/StateProportionsDash?%3Aembed=y&%3AshowVizHome=no&%3Adisplay_count=y&%3Adisplay_static_image=y&%3AbootstrapWhenNotified=true&%3Alanguage=en&:embed=y&:showVizHome=n&:apiID=host0#navType=1&navSrc=Parse`)
+    await page._client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: './' });
     await page.waitForTimeout(2500)
     await page.click(`#download-ToolbarButton > span.tabToolbarButtonImg.tab-icon-download`)
     await page.waitForTimeout(2000)
     await page.click(`#DownloadDialog-Dialog-Body-Id > div > fieldset > button:nth-child(4)`)
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(3000)
     await page.click(`#export-crosstab-options-dialog-Dialog-BodyWrapper-Dialog-Body-Id > div > div.foyjxgp > div:nth-child(2) > div > label:nth-child(2) > input`)
     await page.waitForTimeout(2000)
     await page.click(`#export-crosstab-options-dialog-Dialog-BodyWrapper-Dialog-Body-Id > div > div.fdr6v0d > button`)
+    results = await page.waitForTimeout(5000)
 
+    var variantData = fs.readFileSync('State Proportions.csv', 'utf8')
+
+    var firstSeperation = variantData.split('\n')
+    var dataNestedArr = []
+    for (i = 0; i < firstSeperation.length; i++) {
+        dataNestedArr.push(firstSeperation[i].split('   '))
+    }
+    for (i = 0; i < dataNestedArr.length; i++) {
+        dataNestedArr[i] = dataNestedArr[i][0].replace(/\x00/g, "").replace(/\t/g, " ")
+    }
+    var californiaData = dataNestedArr[2].split(' ')
+
+    var californiaTotalSequences = californiaData[californiaData.length - 1]
+    var p1CaliforniaPositive = californiaData[4]
+
+    variantData = [californiaTotalSequences, p1CaliforniaPositive]
+
+    await page.waitForTimeout(1000)
+    p1Variant = {
+        "p1Cases": `${variantData[1]} | ${Math.round((parseInt(variantData[1].replace('%', "")) / 100) * parseInt(variantData[0].replace(',', "")))}`,
+        "caVariants": variantData[0].replace(',', "")
+    }
 
     await page.waitForTimeout(5000) // add precautionary timeout
     await page.goto(config.dailyLink)
@@ -305,11 +330,11 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
     await page.waitForTimeout(500)
     page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
-    page.keyboard.type(b117Cases.caTotal)
+    page.keyboard.type(p1Variant.p1Cases)
     await page.waitForTimeout(500)
     page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
-    page.keyboard.type(b117Cases.usTotal)
+    page.keyboard.type(p1Variant.caVariants)
     await page.waitForTimeout(500)
     page.keyboard.press("ArrowRight")
     await page.waitForTimeout(500)
