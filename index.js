@@ -306,7 +306,7 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
 
     await page.waitForTimeout(1000)
     p1Variant = {
-        "p1Cases": `${variantData[1]} | ${Math.round((parseInt(variantData[1].replace('%', "")) / 100) * parseInt(variantData[0].replace(',', "")))}`,
+        "p1Cases": `${Math.round((parseInt(variantData[1].replace('%', "")) / 100) * parseInt(variantData[0].replace(',', "")))}`,
         "caVariants": variantData[0].replace(',', "")
     }
 
