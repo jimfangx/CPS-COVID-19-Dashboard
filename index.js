@@ -167,7 +167,7 @@ puppeteer.launch({ headless: false, defaultViewport: null }).then(async function
         var numTests = null
         numTests = await page.evaluate(() => {
             var numTests = null
-            numTests = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(3) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
+            numTests = document.querySelector("#pvExplorationHost > div > div > exploration > div > explore-canvas-modern > div > div.canvasFlexBox > div > div.displayArea.disableAnimations.actualSizeAlignCenter.actualSizeAlignTop.actualSizeOrigin > div.visualContainerHost > visual-container-repeat > visual-container-modern:nth-child(1) > transform > div > div:nth-child(4) > div > visual-modern > div > svg > g:nth-child(1) > text > tspan").innerHTML.trim()
             return numTests
         })
         alamedaTest[monthNames[todayDate.getMonth()] + " " + todayDate.getDate()] = numTests
