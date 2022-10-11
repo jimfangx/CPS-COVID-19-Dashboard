@@ -67,7 +67,7 @@ This Project is licensed under MIT License - see the LICENSE.md file for more de
 Feel free to contact me if you find bugs, license issues, missing credits, etc.
 
   * Please contact me here:
-    * Email: jfang.cv.ca.us@gmail.com / yfang@college-prep.org
+    * Email: jim@airfusion.dev / yfang@college-prep.org
     * Discord: AirFusion#1706
 
 ## Note/Notes 
