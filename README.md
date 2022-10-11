@@ -68,7 +68,7 @@ Feel free to contact me if you find bugs, license issues, missing credits, etc.
 
   * Please contact me here:
     * Email: jim@airfusion.dev / yfang@college-prep.org
-    * Discord: AirFusion#1706
+    * Discord: AirFusion#5112
 
 ## Note/Notes 
 * The implemented website is accessible by College Prep students & staff only.
